@@ -19,7 +19,6 @@ TEST_SOURCES := $(shell go list -f '{{range .TestGoFiles}}{{ $$.Dir }}/{{.}} {{e
 
 .PHONY: all
 all: build
-	@echo
 
 $(BIN) stage:
 	@mkdir -p $@
@@ -32,9 +31,13 @@ $(BIN)/mockery: go.mod | $(BIN)
 	go build -o $@ github.com/vektra/mockery
 	@touch $@
 
+$(BIN)/go-bindata: go.mod | $(BIN)
+	go build -o $@ github.com/kevinburke/go-bindata
+	@touch $@
+
 ## installs dev tools
 .PHONY: devtools
-devtools: $(BIN)/ginkgo $(BIN)/mockery
+devtools: $(BIN)/ginkgo $(BIN)/mockery $(BIN)/go-bindata
 
 ## run tests
 stage/.tests_ran: $(TEST_SOURCES) $(SOURCES) $(BIN)/ginkgo | stage

@@ -9,6 +9,8 @@ import (
     "github.com/arran4/golang-ical"
 )
 
+// https://icalendar.org/validator.html#results
+
 var _ = Describe("Cal", func() {
     It("does … something?", func() {
 

@@ -4,6 +4,7 @@ require (
 	github.com/arran4/golang-ical v0.0.0-20181016092553-4d707e739562
 	github.com/google/uuid v1.1.0
 	github.com/jessevdk/go-flags v1.4.0
+	github.com/kevinburke/go-bindata v3.13.0+incompatible // indirect
 	github.com/kr/pretty v0.1.0 // indirect
 	github.com/onsi/ginkgo v1.7.0
 	github.com/onsi/gomega v1.4.3
