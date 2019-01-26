@@ -9,6 +9,7 @@ import (
     log "github.com/sirupsen/logrus"
 
     "github.com/blalor/flight-cal/cal"
+    "github.com/arran4/golang-ical"
 )
 
 var version string = "undef"
@@ -23,7 +24,7 @@ type Options struct {
     ArriveAirport     string `long:"arrive-airport" description:"arrival airport" required:"y"`
     ArriveTime        string `long:"arrive-time"    description:"arrival time, 2006-01-02T15:04" required:"y"`
 
-    OutFile string `long:"output" description:"output file" required:"y"`
+    OutFile string `long:"output" description:"output file"`
 }
 
 func main() {
@@ -58,12 +59,6 @@ func main() {
     log.Debug("hi there! (tickertape tickertape)")
     log.Infof("version: %s", version)
 
-    of, err := os.Create(opts.OutFile)
-    if err != nil {
-        log.Fatalf("unable to open %s: %v", opts.OutFile, err)
-    }
-
-    defer of.Close()
     c, err := cal.CreateFlightCal(
         opts.FlightDescription,
         opts.DepartAirport,
@@ -71,13 +66,17 @@ func main() {
         opts.ArriveAirport,
         opts.ArriveTime,
     )
+    checkError("unable to create event", err)
 
-    if err != nil {
-        log.Fatalf("unable to create event: %v", err)
+    outFn := opts.OutFile
+    if outFn == "" {
+        outFn = c.Events()[0].GetProperty(ics.ComponentPropertyDtStart).Value + " " + opts.FlightDescription + ".ics"
     }
+
+    of, err := os.Create(outFn)
+    checkError("unable to open file", err)
+    defer of.Close()
 
     _, err = of.WriteString(c.Serialize())
-    if err != nil {
-        log.Fatalf("unable to write data: %v", err)
-    }
+    checkError("unable to write data", err)
 }
