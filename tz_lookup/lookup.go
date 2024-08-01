@@ -1,7 +1,7 @@
 package tz_lookup
 
 import (
-    "gopkg.in/ugjka/go-tz.v2/tz"
+    "github.com/ugjka/go-tz/v2"
     "time"
 )
 
